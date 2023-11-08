@@ -36,11 +36,25 @@ const Gallery = ({ users }: GalleryProps) => {
     setIsModalOpen(false);
   };
 
+  const handleUserSort = (sortBy: string, sortOrder: string) => {
+    const userKey = sortBy as keyof User;
+
+    const sorted = [...usersList].sort((a, b) => {
+      if (sortOrder === "ascending") {
+        return a[userKey] > b[userKey] ? 1 : -1;
+      } else {
+        return a[userKey] < b[userKey] ? 1 : -1;
+      }
+    });
+
+    setUsersList(sorted);
+  };
+
   return (
     <div className="user-gallery">
       <div className="heading">
         <h1 className="title">Users</h1>
-        <Controls />
+        <Controls handleSort={handleUserSort} />
       </div>
       <div className="items">
         {usersList.map((user, index) => (
