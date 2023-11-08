@@ -9,6 +9,7 @@ import {
   FaEnvelope,
 } from "react-icons/fa6";
 
+import Controls from "./controls";
 import Modal from "./modal";
 
 import { User } from "./types/user";
@@ -24,7 +25,7 @@ const Gallery = ({ users }: GalleryProps) => {
   const handleModalOpen = (id: number) => {
     const user = usersList.find((item) => item.id === id) || null;
 
-    if(user) {
+    if (user) {
       setSelectedUser(user);
       setIsModalOpen(true);
     }
@@ -35,9 +36,26 @@ const Gallery = ({ users }: GalleryProps) => {
     setIsModalOpen(false);
   };
 
+  const handleUserSort = (sortBy: string, sortOrder: string) => {
+    const userKey = sortBy as keyof User;
+
+    const sorted = [...usersList].sort((a, b) => {
+      if (sortOrder === "ascending") {
+        return a[userKey] > b[userKey] ? 1 : -1;
+      } else {
+        return a[userKey] < b[userKey] ? 1 : -1;
+      }
+    });
+
+    setUsersList(sorted);
+  };
+
   return (
     <div className="user-gallery">
-      <h1 className="heading">Users</h1>
+      <div className="heading">
+        <h1 className="title">Users</h1>
+        <Controls handleSort={handleUserSort} />
+      </div>
       <div className="items">
         {usersList.map((user, index) => (
           <div
